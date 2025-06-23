@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>User Credentials</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <style>
+    .eye-icon {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #555;
+    }
+  </style>
+</head>
+<body class="h-screen flex font-sans bg-gray-100">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-[#1C1C1C] text-white flex flex-col py-8 px-4 h-full">
+    <h2 class="text-xl font-bold mb-10 px-2">Dashboard</h2>
+    <nav class="space-y-6">
+      <a href="index.html" class="flex items-center space-x-3 px-2 text-white">
+        <i class="fas fa-tachometer-alt"></i><span>Dashboard</span>
+      </a>
+      <a href="victim.html" class="flex items-center space-x-3 px-2 text-white">
+        <i class="fas fa-user-friends"></i><span>Victim</span>
+      </a>
+      <a href="login.html" class="flex items-center space-x-3 px-2 text-white">
+        <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-10 overflow-y-auto">
+    <div class="w-full max-w-6xl">
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">User Credentials Table</h1>
+      <p id="userDescription" class="text-gray-600 mb-6 italic"></p>
+      <div class="bg-white rounded-xl shadow p-6">
+        <table id="dataTable" class="display w-full">
+          <thead class="bg-blue-100 text-blue-900 text-sm">
+            <tr>
+              <th class="py-3 px-4 text-left">Website</th>
+              <th class="py-3 px-4 text-left">Username / Email</th>
+              <th class="py-3 px-4 text-left">Password</th>
+            </tr>
+          </thead>
+          <tbody id="logBody" class="text-sm text-gray-800"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const logs = {
+      1: [
+        ["2025-06-09 21:01", "https://twitter.com/login"],
+        ["2025-06-09 21:03", "https://mail.google.com/"],
+        ["2025-06-09 21:05", "https://web.whatsapp.com/"],
+        ["2025-06-09 21:07", "https://drive.google.com/"],
+        ["2025-06-09 21:09", "https://linkedin.com/login"],
+        ["2025-06-09 21:11", "https://stackoverflow.com/questions"],
+        ["2025-06-09 21:13", "https://zoom.us/signin"],
+        ["2025-06-09 21:15", "https://instagram.com/"],
+        ["2025-06-09 21:17", "https://olivia.ub.ac.id/"],
+        ["2025-06-09 21:19", "https://github.com/login"]
+      ],
+      2: [
+        ["2025-06-09 20:10", "https://simbelmawa.kemdikbud.go.id/portal/"],
+        ["2025-06-09 20:11", "https://netflix.com/login"],
+        ["2025-06-09 20:12", "https://belajarpython.com/"],
+        ["2025-06-09 20:13", "https://mediaindonesia.com/pkm"],
+        ["2025-06-09 20:14", "https://tokopedia.com/"],
+        ["2025-06-09 20:15", "https://shopee.co.id/"],
+        ["2025-06-09 20:16", "https://detik.com/berita-belajar"],
+        ["2025-06-09 20:17", "https://if.polibatam.ac.id/Page/Dosen"],
+        ["2025-06-09 20:18", "https://21cineplex.com/"],
+        ["2025-06-09 20:19", "https://zoom.us/"]
+      ],
+      3: [
+        ["2025-06-09 19:00", "https://ruangguru.com/blog/konsep-limit"],
+        ["2025-06-09 19:05", "https://10fastfingers.com/"],
+        ["2025-06-09 19:10", "https://id.wikipedia.org/wiki/Matematika_diskrit"],
+        ["2025-06-09 19:15", "https://youtube.com/"],
+        ["2025-06-09 19:20", "https://learning-if.polibatam.ac.id/"],
+        ["2025-06-09 19:25", "https://petanikode.com/python-list/"],
+        ["2025-06-09 19:30", "https://canva.com/"],
+        ["2025-06-09 19:35", "https://spotify.com/"],
+        ["2025-06-09 19:40", "https://discord.com/"],
+        ["2025-06-09 19:45", "https://gramedia.com/"]
+      ],
+      4: [
+        ["2025-06-09 18:01", "https://github.com/"],
+        ["2025-06-09 18:03", "https://pbl.polibatam.ac.id/"],
+        ["2025-06-09 18:05", "https://ibm.com/"],
+        ["2025-06-09 18:07", "https://hackthebox.com/"],
+        ["2025-06-09 18:09", "https://netacad.com/"],
+        ["2025-06-09 18:11", "https://picoctf.org/"],
+        ["2025-06-09 18:13", "https://w3schools.com/"],
+        ["2025-06-09 18:15", "https://turnitin.com/"],
+        ["2025-06-09 18:17", "https://webtoons.com/"],
+        ["2025-06-09 18:19", "https://youtube.com/"]
+      ]
+    };
+
+    const credentials = {
+      1: { username: "user1@example.com", password: "hunter123" },
+      2: { username: "alpha2@gmail.com", password: "welcome@2025" },
+      3: { username: "pelajar3@edu.id", password: "diskritMtk!23" },
+      4: { username: "agent4@security.com", password: "HackMeIfYouCan" }
+    };
+
+    const titleMap = {
+      "twitter.com": "Twitter",
+      "mail.google.com": "Gmail",
+      "web.whatsapp.com": "WhatsApp Web",
+      "drive.google.com": "Google Drive",
+      "linkedin.com": "LinkedIn",
+      "stackoverflow.com": "Stack Overflow",
+      "zoom.us": "Zoom",
+      "instagram.com": "Instagram",
+      "olivia.ub.ac.id": "OLIVIA UB",
+      "github.com": "GitHub",
+      "simbelmawa.kemdikbud.go.id": "Simbelmawa",
+      "netflix.com": "Netflix",
+      "belajarpython.com": "Belajar Python",
+      "mediaindonesia.com": "Media Indonesia",
+      "tokopedia.com": "Tokopedia",
+      "shopee.co.id": "Shopee",
+      "detik.com": "Detik",
+      "if.polibatam.ac.id": "Dosen Polibatam",
+      "21cineplex.com": "Cinema XXI",
+      "ruangguru.com": "Ruangguru",
+      "10fastfingers.com": "10FastFingers",
+      "id.wikipedia.org": "Wikipedia",
+      "canva.com": "Canva",
+      "spotify.com": "Spotify",
+      "discord.com": "Discord",
+      "hackthebox.com": "Hack The Box",
+      "netacad.com": "Cisco NetAcad",
+      "w3schools.com": "W3Schools",
+      "picoctf.org": "PicoCTF",
+      "turnitin.com": "Turnitin",
+      "webtoons.com": "Webtoons",
+      "youtube.com": "YouTube"
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get("id");
+    const userLogs = logs[userId] || [];
+    const creds = credentials[userId] || { username: "N/A", password: "N/A" };
+
+    const userDescription = document.getElementById("userDescription");
+    userDescription.textContent = userId
+      ? `Here is the credential record for User ${userId}`
+      : `User data not found.`;
+
+    const tbody = document.getElementById("logBody");
+    userLogs.forEach(([timestamp, link], index) => {
+      const url = new URL(link);
+      const domain = url.hostname.replace("www.", "");
+      const title = titleMap[domain] || domain.charAt(0).toUpperCase() + domain.slice(1);
+      const inputId = `password-${index}`;
+      const eyeId = `eye-${index}`;
+
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td class="py-3 px-4">
+          <div class="flex items-start space-x-2">
+            <i class="fas fa-globe text-gray-500 pt-1"></i>
+            <div>
+              <a href="${link}" class="font-semibold text-blue-700 hover:underline" target="_blank">${title}</a><br />
+              <span class="text-xs text-gray-600 break-all">${link}</span>
+            </div>
+          </div>
+        </td>
+        <td class="py-3 px-4">${creds.username}</td>
+        <td class="py-3 px-4 relative">
+          <input type="password" id="${inputId}" value="${creds.password}" readonly class="w-full bg-transparent pr-8">
+          <span class="eye-icon" onclick="togglePassword('${inputId}', '${eyeId}')">
+            <i id="${eyeId}" class="fas fa-eye"></i>
+          </span>
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    function togglePassword(inputId, eyeId) {
+      const input = document.getElementById(inputId);
+      const eye = document.getElementById(eyeId);
+      if (input.type === "password") {
+        input.type = "text";
+        eye.classList.remove("fa-eye");
+        eye.classList.add("fa-eye-slash");
+      } else {
+        input.type = "password";
+        eye.classList.remove("fa-eye-slash");
+        eye.classList.add("fa-eye");
+      }
+    }
+
+    $(document).ready(function () {
+      $('#dataTable').DataTable();
+    });
+  </script>
+</body>
+</html>

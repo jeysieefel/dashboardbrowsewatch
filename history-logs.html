@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>History Logs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .animate-fadeIn {
+    animation: fadeIn 0.25s ease-out;
+  }
+</style>
+</head>
+<body class="h-screen flex font-sans bg-gray-100">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-[#1C1C1C] text-white flex flex-col py-8 px-4 h-full">
+    <h2 class="text-xl font-bold mb-10 px-2">Dashboard</h2>
+    <nav class="space-y-6">
+      <a href="index.html" class="flex items-center space-x-3 px-2 text-white"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+      <a href="victim.html" class="flex items-center space-x-3 px-2 text-white"><i class="fas fa-user-friends"></i><span>Victim</span></a>
+      <a href="login.html" class="flex items-center space-x-3 px-2 text-white"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-10 overflow-y-auto">
+    <div class="w-full max-w-6xl">
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">History Logs</h1>
+      <p id="userDescription" class="text-gray-600 mb-6 italic"></p>
+      <div class="bg-white rounded-xl shadow p-6">
+        <table id="logsTable" class="display w-full">
+          <thead class="bg-blue-100 text-blue-900 text-sm">
+            <tr>
+              <th class="py-3 px-4 text-left">Timestamp</th>
+              <th class="py-3 px-4 text-left">URL</th>
+            </tr>
+          </thead>
+          <tbody id="logBody" class="text-sm text-gray-800"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const logs = {
+      1: [
+        ["2025-06-09 21:01", "https://twitter.com/login"],
+        ["2025-06-09 21:03", "https://mail.google.com/"],
+        ["2025-06-09 21:05", "https://web.whatsapp.com/"],
+        ["2025-06-09 21:07", "https://drive.google.com/"],
+        ["2025-06-09 21:09", "https://linkedin.com/login"],
+        ["2025-06-09 21:11", "https://stackoverflow.com/questions"],
+        ["2025-06-09 21:13", "https://zoom.us/signin"],
+        ["2025-06-09 21:15", "https://instagram.com/"],
+        ["2025-06-09 21:17", "https://olivia.ub.ac.id/"],
+        ["2025-06-09 21:19", "https://github.com/login"]
+      ],
+      2: [
+        ["2025-06-09 20:10", "https://simbelmawa.kemdikbud.go.id/portal/"],
+        ["2025-06-09 20:11", "https://netflix.com/login"],
+        ["2025-06-09 20:12", "https://belajarpython.com/"],
+        ["2025-06-09 20:13", "https://mediaindonesia.com/humaniora/453382/pkm-pengertian-bentuk-kegiatan-bidang-dan-tujuan"],
+        ["2025-06-09 20:14", "https://tokopedia.com/"],
+        ["2025-06-09 20:15", "https://shopee.co.id/"],
+        ["2025-06-09 20:16", "https://www.detik.com/jogja/kota-pelajar/d-7539422/10-tips-cara-belajar-yang-efektif-dan-efisien-untuk-mahasiswa"],
+        ["2025-06-09 20:17", "https://if.polibatam.ac.id/Page/Dosen/Dosen.php"],
+        ["2025-06-09 20:18", "https://21cineplex.com/"],
+        ["2025-06-09 20:19", "https://zoom.us/"]
+      ],
+      3: [
+        ["2025-06-09 19:00", "https://www.ruangguru.com/blog/konsep-limit-fungsi-aljabar-dan-sifat-sifatnya"],
+        ["2025-06-09 19:05", "https://10fastfingers.com/typing-test/indonesian"],
+        ["2025-06-09 19:10", "https://id.wikipedia.org/wiki/Matematika_diskrit"],
+        ["2025-06-09 19:15", "https://youtube.com/"],
+        ["2025-06-09 19:20", "https://learning-if.polibatam.ac.id/"],
+        ["2025-06-09 19:25", "https://www.petanikode.com/python-list/"],
+        ["2025-06-09 19:30", "https://canva.com/"],
+        ["2025-06-09 19:35", "https://open.spotify.com/track/5odlY52u43F5BjByhxg7wg"],
+        ["2025-06-09 19:40", "https://discord.com/"],
+        ["2025-06-09 19:45", "https://www.gramedia.com/best-seller/cara-membuat-daftar-isi/"]
+      ],
+      4: [
+        ["2025-06-09 18:01", "https://github.com/"],
+        ["2025-06-09 18:03", "https://pbl.polibatam.ac.id/apps/index.php?page=login"],
+        ["2025-06-09 18:05", "https://www.ibm.com/id-id/topics/cyber-risk-management"],
+        ["2025-06-09 18:07", "https://account.hackthebox.com/login"],
+        ["2025-06-09 18:09", "https://www.netacad.com/"],
+        ["2025-06-09 18:11", "https://www.picoctf.org/"],
+        ["2025-06-09 18:13", "https://w3schools.com/"],
+        ["2025-06-09 18:15", "https://www.turnitin.com/login_page.asp"],
+        ["2025-06-09 18:17", "https://www.webtoons.com/id/action/the-real-lesson/list?title_no=2423"],
+        ["2025-06-09 18:19", "https://www.youtube.com/watch?v=YNrkcCtOZIU"]
+      ]
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get("id");
+    const userLogs = logs[userId] || [];
+
+    const userDescription = document.getElementById("userDescription");
+    userDescription.textContent = userId
+      ? `Here is the browsing activity history of User ${userId}`
+      : `User activity history not found.`;
+
+    const tbody = document.getElementById("logBody");
+
+    userLogs.forEach(([timestamp, link]) => {
+      const url = new URL(link);
+      const hostname = url.hostname.replace("www.", "");
+
+      const titleMap = {
+        "login.live.com": "Microsoft Login",
+        "mail.google.com": "Gmail Compose",
+        "youtube.com": "YouTube Video",
+        "learning-if.polibatam.ac.id": "E-learning Polibatam",
+        "twitter.com": "Twitter Login",
+        "instagram.com": "Instagram Login",
+        "web.whatsapp.com": "WhatsApp Web",
+        "github.com": "GitHub Login",
+        "pbl.polibatam.ac.id": "Pamerin Login",
+        "www.ibm.com": "Cyber Risk Management",
+        "belajarpython.com": "Belajar Python",
+        "netflix.com": "Netflix Video",
+        "if.polibatam.ac.id": "Dosen IF Polibatam",
+        "simbelmawa.kemdikbud.go.id": "Simbelmawa",
+        "mediaindonesia.com": "Pengertian PKM",
+        "tokopedia.com": "Tokopedia",
+        "21cineplex.com": "Cinema XXI",
+        "shopee.co.id": "Shopee",
+        "www.detik.com": "Belajar Efektif",
+        "zoom.us": "Zoom Login",
+        "drive.google.com": "Drive Login",
+        "olivia.ub.ac.id": "OLIVIA UB",
+        "linkedin.com": "Linkedin",
+        "stackoverflow.com": "Stackoverflow",
+        "www.ruangguru.com": "Limit Fungsi Aljabar",
+        "www.petanikode.com": "Struktur Data List",
+        "canva.com": "Canva Login",
+        "10fastfingers.com": "Mengetik Cepat 10 Jari",
+        "id.wikipedia.org": "Matematika Diskrit",
+        "open.spotify.com": "Golden Hour",
+        "www.gramedia.com": "Membuat Daftar Isi Otomatis",
+        "discord.com": "Discord",
+        "account.hackthebox.com": "Hack The Box Login",
+        "www.netacad.com": "Cisco Networking Academy",
+        "w3schools.com": "W3Schools Online Web Tutorials",
+        "www.picoctf.org": "PicoCTF",
+        "www.turnitin.com": "Turnitin Login",
+        "www.webtoons.com": "The Real Lesson",
+        "www.youtube.com": "Project Based Learning"
+      };
+
+      const title = titleMap[url.hostname] || hostname.charAt(0).toUpperCase() + hostname.slice(1);
+
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td class="py-3 px-4">${timestamp}</td>
+        <td class="py-3 px-4">
+          <div class="flex items-start space-x-2">
+            <i class="fas fa-globe text-gray-500 pt-1"></i>
+            <div>
+              <a href="${link}" class="font-semibold text-blue-700 hover:underline" target="_blank">${title}</a><br />
+              <span class="text-xs text-gray-600 break-all">${link}</span>
+            </div>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    $(document).ready(function () {
+      $('#logsTable').DataTable();
+    });
+  </script>
+</body>
+</html>
